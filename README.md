@@ -1,0 +1,1 @@
+This is my first assignment for csc-308 (Software Engineering I) at Cal Poly with Prof. Chris Zielke. We used [Vite](https://vite.dev/) and [React](https://react.dev/) along with `npm` to create a basic counter and edit some displayed text.
