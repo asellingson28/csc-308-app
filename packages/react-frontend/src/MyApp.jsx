@@ -7,26 +7,29 @@ import Form from "./Form";
 
 function MyApp() {
 
-function removeOneCharacter(index) {
-    const updated = characters.filter((character, i) => {
-    return i !== index;
-    });
-    setCharacters(updated);
-}
+	function removeOneCharacter(index) {
+		const updated = characters.filter((character, i) => {
+			return i !== index;
+		});
+		setCharacters(updated);
+	}
+
+	function updateList(person) {
+		setCharacters([...characters, person]);
+	}
+
+	const [characters, setCharacters] = useState([]);
 
 
-const [characters, setCharacters] = useState([]);
-
-
-return (
-  <div className="container">
-    <Table
-      characterData={characters}
-      removeCharacter={removeOneCharacter}
-    />
-    <Form />
-  </div>
-);
+	return (
+		<div className="container">
+			<Table
+				characterData={characters}
+				removeCharacter={removeOneCharacter}
+			/>
+			<Form handleSubmit={updateList} />
+		</div>
+	);
 }
 
 
