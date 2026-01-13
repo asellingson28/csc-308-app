@@ -10,3 +10,8 @@ rm -rf node_modules package-lock.json
 npm install
 npm run dev
 ```
+
+For reference, the dev in the root directory `package.json` needs
+```shell
+npm -w react-frontend run dev
+```
