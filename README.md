@@ -11,7 +11,7 @@ npm install
 npm run dev
 ```
 
-For reference, the dev in the root directory `package.json` needs the following
+For reference, the dev in the root directory `package.json`
 ```shell
 npm -w react-frontend run dev
 ```
