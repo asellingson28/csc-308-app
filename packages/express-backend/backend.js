@@ -63,3 +63,55 @@ app.get("/users", (req, res) => {
     res.send(users);
   }
 });
+
+const findUserById = (id) =>
+  users["users_list"].find((user) => user["id"] === id);
+
+app.get("/users/:id", (req, res) => {
+  const id = req.params["id"]; //or req.params.id
+  let result = findUserById(id);
+  if (result === undefined) {
+    res.status(404).send("Resource not found.");
+  } else {
+    res.send(result);
+  }
+});
+
+const addUser = (user) => {
+  users["users_list"].push(user);
+  return user;
+};
+
+app.post("/users/:id", (req, res) => {
+  const userToAdd = req.body; // incoming data
+  addUser(userToAdd);
+  res.send();
+});
+
+const deleteUserById = (id) => {
+  const index = users["users_list"].findIndex(user => user.id === id);
+  if (index !== -1) {
+    let removed = users["users_list"].splice(index, 1);
+    console.log(removed);
+    return true; // deleted
+  }
+  return false; // not found
+};
+
+//=========== DELETE ROUTE ===========
+app.delete("/users/:id", (req, res) => {
+  const id = req.params.id;
+
+  const deleted = deleteUserById(id);
+  if (!deleted) return res.status(404).send("Resource not found.");
+
+  res.status(204).send(); // No Content
+});
+
+
+// res.on('close', () => {
+//   console.log('Client disconnected');
+//   res.destroy(); // Forcefully close the connection
+// });   
+
+// curl -i http://localhost:8000/users/abc123
