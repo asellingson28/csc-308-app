@@ -82,11 +82,30 @@ const addUser = (user) => {
   return user;
 };
 
-app.post("/users/:id", (req, res) => {
-  const userToAdd = req.body; // incoming data
-  addUser(userToAdd);
-  res.send();
+app.post("/users", (req, res) => {
+  const { id, name, job } = req.body;
+  console.log({ id, name, job });
+  // Basic validation
+  if (!id || !name || !job) {
+    return res.status(400).send({
+      error: "id, name, and job are required"
+    });
+  }
+
+  // Prevent duplicate IDs
+  const existingUser = findUserById(id);
+  if (existingUser) {
+    return res.status(409).send({
+      error: "User with this id already exists"
+    });
+  }
+
+  const newUser = addUser({ id, name, job });
+
+  // Respond properly
+  res.status(201).send(newUser);
 });
+
 
 const deleteUserById = (id) => {
   const index = users["users_list"].findIndex(user => user.id === id);
@@ -115,3 +134,14 @@ app.delete("/users/:id", (req, res) => {
 // });   
 
 // curl -i http://localhost:8000/users/abc123
+
+/**
+ * curl -i -X POST http://localhost:8000/users \
+  -H "Content-Type: application/json" \
+  -d '{
+    "id": "new111",
+    "name": "Frank",
+    "job": "Lawyer"
+  }'
+
+ */
