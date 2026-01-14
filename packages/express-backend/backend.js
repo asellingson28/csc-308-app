@@ -7,7 +7,7 @@ const port = 8000;
 app.use(express.json()); // express app to process incoming data in JSON format
 
 app.get("/", (req, res) => { // / is the url endpoint (like root link address)
-  res.send("Hello World!");  // we have the callback function that'll be called when our server receives an incoming GET request matching the / URL pattern
+  res.send("Hello World of people!");  // we have the callback function that'll be called when our server receives an incoming GET request matching the / URL pattern
 });
 
 app.listen(port, () => {
@@ -46,6 +46,20 @@ const users = {
   ]
 };
 
+
+const findUserByName = (name) => {
+  return users["users_list"].filter(
+    (user) => user["name"] === name
+  );
+};
+
 app.get("/users", (req, res) => {
-  res.send(users);
-}); 
+  const name = req.query.name;
+  if (name != undefined) { // name provided in form of localhost:8000/users?name=Mac
+    let result = findUserByName(name);
+    result = { users_list: result };
+    res.send(result);
+  } else {
+    res.send(users);
+  }
+});

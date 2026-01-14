@@ -2,10 +2,11 @@
   "name": "express-backend",
   "version": "1.0.0",
   "main": "backend.js",
-    "type": "module",
-
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "npx nodemon backend.js",
+    "start": "node backend.js"
   },
   "author": "",
   "license": "ISC",
@@ -14,4 +15,3 @@
     "express": "^5.2.1"
   }
 }
- 
