@@ -1,8 +1,11 @@
 // backend.js
 import express from "express"; // express module -- used for http communication
+import cors from "cors"; // used for program testing
 
 const app = express(); // instance of express 
 const port = 8000;
+
+app.use(cors());
 
 app.use(express.json()); // express app to process incoming data in JSON format
 

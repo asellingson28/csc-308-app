@@ -15,3 +15,5 @@ For reference, the dev in the root directory `package.json`
 ```shell
 npm -w react-frontend run dev
 ```
+
+Making API calls from postman updates both the `react-frontend` and https:localhost:8000/users
