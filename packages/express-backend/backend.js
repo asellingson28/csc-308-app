@@ -86,27 +86,24 @@ const addUser = (user) => {
 };
 
 app.post("/users", (req, res) => {
-  const { id, name, job } = req.body;
-  console.log({ id, name, job });
-  // Basic validation
-  if (!id || !name || !job) {
-    return res.status(400).send({
-      error: "id, name, and job are required"
+  let { id, name, job } = req.body;
+
+  // Basic validation (don't require id)
+  if (!name || !job) {
+    return res.status(400).json({
+      error: "name and job are required"
     });
   }
 
-  // Prevent duplicate IDs
-  const existingUser = findUserById(id);
-  if (existingUser) {
-    return res.status(409).send({
-      error: "User with this id already exists"
-    });
+  // Generate an id if client didn't send one
+  if (!id) {
+    id = Math.random().toString(16).slice(2, 9);
   }
 
-  const newUser = addUser({ id, name, job });
+  const userToAdd = { id, name, job };
+  addUser(userToAdd);
 
-  // Respond properly
-  res.status(201).send(newUser);
+  return res.status(201).json(userToAdd);
 });
 
 

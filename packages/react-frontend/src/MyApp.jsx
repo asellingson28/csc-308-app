@@ -14,10 +14,6 @@ function MyApp() {
 		setCharacters(updated);
 	}
 
-	function updateList(person) {
-		setCharacters([...characters, person]);
-	}
-
 	const [characters, setCharacters] = useState([]);
 
 	
@@ -28,6 +24,35 @@ function MyApp() {
 	}
 	
 
+	function postUser(person) {
+		const promise = fetch("http://localhost:8000/users", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(person),
+		});
+
+		return promise;
+	}
+	
+	function updateList(person) {
+	postUser(person)
+		.then((res) => {
+		if (res.status !== 201) {
+			throw new Error("User not created");
+		}
+		return res.json(); 
+		})
+		.then((createdUser) => {
+		setCharacters((prev) => [...prev, createdUser]);
+		})
+		.catch((error) => {
+		console.log(error);
+		});
+	}
+
+
 	useEffect(() => {
 	fetchUsers()
 		.then((res) => res.json())
@@ -35,6 +60,35 @@ function MyApp() {
 		.catch((error) => { console.log(error); });
 	}, [] );
 	
+	function deleteUser(id) {
+		return fetch(`http://localhost:8000/users/${id}`, {
+			method: "DELETE",
+		});
+	}
+
+	function removeOneCharacter(index) {
+		const userToDelete = characters[index];
+		const id = userToDelete?.id;
+
+		if (!id) {
+			console.log("Cannot delete: missing user id");
+			return;
+		}
+
+		deleteUser(id)
+			.then((res) => {
+			if (res.status === 204) {
+				// backend delete succeeded now update frontend state
+				setCharacters((prev) => prev.filter((_, i) => i !== index));
+			} else if (res.status === 404) {
+				console.log("User not found on backend (404). No deletion performed.");
+			} else {
+				console.log(`Unexpected DELETE status: ${res.status}`);
+			}
+			})
+			.catch((err) => console.log(err));
+		}
+
 	return (
 		<div className="container">
 			<Table
